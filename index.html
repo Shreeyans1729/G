@@ -1,12 +1,746 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Simple HTML Page</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ultimate Birthday Celebration!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto:wght@300;700&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      font-family: 'Roboto', sans-serif;
+      background: radial-gradient(circle at 50% 30%, #fff1eb 0%, #ace0f9 100%), linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      background-blend-mode: lighten;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+    body {
+      position: relative;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    nav {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      background: rgba(0,0,0,0.18);
+      z-index: 10000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0.5em 0 0.2em 0;
+      backdrop-filter: blur(12px);
+    }
+    nav button {
+      margin: 0 1.2em;
+      background: linear-gradient(90deg,#ffe259 0%, #fa709a 100%);
+      border: none;
+      border-radius: 30px;
+      padding: 0.7em 2em;
+      font-size: 1.2em;
+      color: #fff;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 20px #fa709a22;
+      transition: background 0.2s, transform 0.15s;
+    }
+    nav button.active, nav button:hover {
+      background: linear-gradient(90deg,#fa709a 0%, #ffe259 100%);
+      color: #fff;
+      transform: scale(1.08);
+    }
+    .music-control {
+      position: fixed;
+      top: 1.2em; right: 2em;
+      z-index: 10001;
+      background: rgba(255,255,255,0.18);
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 1.8em;
+      color: #fa709a;
+      cursor: pointer;
+      box-shadow: 0 4px 16px #fa709a22;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .music-control:hover {background: rgba(255,255,255,0.36);}
+    main {
+      margin-top: 70px;
+      width: 100vw;
+      min-height: 93vh;
+      display: flex; flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    section.page {
+      display: none;
+      width: 100vw;
+      min-height: 85vh;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      position: absolute;
+      top: 0; left: 0;
+      z-index: 12;
+      transition: opacity 0.6s;
+    }
+    section.page.active {
+      display: flex;
+      animation: fadeInPage 1.2s;
+      opacity: 1;
+    }
+    @keyframes fadeInPage {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    /* Home styles (from previous birthday theme) */
+    .hero {
+      height: 80vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      text-align: center;
+      z-index: 10;
+      position: relative;
+      background: linear-gradient(120deg, #0008 40%, #0000 100%);
+      backdrop-filter: blur(16px);
+      animation: heroFade 2s ease-in-out forwards;
+    }
+    @keyframes heroFade {
+      0% { opacity: 0.8; }
+      100% { opacity: 1; }
+    }
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 5em;
+      margin-bottom: 0;
+      background: linear-gradient(90deg,#ffe259 40%, #ffa751 60%, #ff6e7f 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 24px #fff9, 0 1px 0 #fa0a;
+      animation: rainbowGlow 2.5s ease-in-out infinite alternate, fadeInDown 1.2s cubic-bezier(.7,0,.3,1.2) forwards;
+    }
+    @keyframes rainbowGlow {
+      from { filter: drop-shadow(0 0 16px #fff6); }
+      to { filter: drop-shadow(0 0 32px #fff) drop-shadow(0 0 8px #ff6e7f); }
+    }
+    h2 {
+      font-size: 2.2em;
+      margin-top: -16px;
+      margin-bottom: 20px;
+      animation: fadeInUp 1.8s cubic-bezier(.6,.3,.4,1.1) forwards;
+      background: linear-gradient(90deg,#9be15d,#00e3ae,#5eaefd,#fa709a);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 20px #fff9, 0 1px 0 #9be15da0;
+    }
+    .message {
+      font-size: 1.5em;
+      margin-top: 30px;
+      max-width: 700px;
+      background: rgba(255,255,255,0.13);
+      padding: 18px 32px;
+      border-radius: 30px;
+      box-shadow: 0 8px 36px #0002;
+      color: #fff;
+      animation: fadeIn 2.6s cubic-bezier(.8,.2,.6,1.2) forwards, messagePulse 2.5s infinite alternate;
+    }
+    @keyframes messagePulse {
+      from { box-shadow: 0 8px 20px #ffecd290; }
+      to { box-shadow: 0 12px 48px #fcb69f90; }
+    }
+    @keyframes fadeInDown {
+      0% { opacity: 0; transform: translateY(-80px) scale(0.96);}
+      100% { opacity: 1; transform: translateY(0) scale(1);}
+    }
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(80px) scale(0.98);}
+      100% { opacity: 1; transform: translateY(0) scale(1);}
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    /* Countdown */
+    .countdown-wrapper {
+      background: rgba(255,255,255,0.08);
+      padding: 3em 2em 2em 2em;
+      border-radius: 40px;
+      box-shadow: 0 8px 36px #fa709a33;
+      text-align: center;
+      color: #fff;
+      margin-top: 2em;
+      min-width: 340px;
+      animation: fadeInUp 1.3s;
+    }
+    .countdown-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.5em;
+      color: #ffe259;
+      background: linear-gradient(90deg,#ffe259,#fa709a);
+      background-clip: text; -webkit-background-clip: text;
+      color: transparent; -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5em;
+      text-shadow: 0 2px 12px #fff9;
+    }
+    .countdown {
+      font-size: 2em;
+      letter-spacing: 2px;
+      margin-top: 0.5em;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 2px 12px #fa709a99;
+    }
+    /* Games */
+    .games-wrap {
+      background: rgba(255,255,255,0.08);
+      box-shadow: 0 8px 36px #fa709a33;
+      border-radius: 30px;
+      padding: 2em 2em 1.5em 2em;
+      min-width: 350px;
+      max-width: 560px;
+      margin: 2em auto;
+      display: flex; flex-direction: column; align-items: center;
+      animation: fadeInUp 1.1s;
+    }
+    .games-menu {
+      display: flex;
+      gap: 1.5em;
+      margin-bottom: 2em;
+    }
+    .games-menu button {
+      padding: 0.7em 1.3em;
+      border-radius: 20px;
+      border: none;
+      background: linear-gradient(90deg,#fa709a 0%, #ffe259 100%);
+      color: #fff;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      font-size: 1em;
+      cursor: pointer;
+      box-shadow: 0 2px 10px #fa709a44;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .games-menu button.active, .games-menu button:hover {
+      background: linear-gradient(90deg,#ffe259 0%, #fa709a 100%);
+      color: #fff;
+      transform: scale(1.07);
+    }
+    .game-area {
+      min-height: 170px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    /* About page */
+    .about-wrap {
+      background: rgba(255,255,255,0.08);
+      box-shadow: 0 8px 36px #fa709a33;
+      border-radius: 30px;
+      padding: 2em 2em 1.5em 2em;
+      min-width: 350px;
+      max-width: 560px;
+      margin: 2em auto;
+      display: flex; flex-direction: column; align-items: center;
+      animation: fadeInUp 1.1s;
+      color: #fff;
+    }
+    .about-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.5em;
+      background: linear-gradient(90deg,#ffe259,#fa709a);
+      background-clip: text; -webkit-background-clip: text;
+      color: transparent; -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5em;
+      text-shadow: 0 2px 12px #fff9;
+    }
+    .about-content {
+      font-size: 1.2em;
+      line-height: 1.6em;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 1.2em;
+    }
+    /* Shared festive stuff */
+    .cake-container, .glow, #balloons, #sparkles, #confetti, #firework-canvas { pointer-events: none; }
+    /* Responsive */
+    @media (max-width: 800px) {
+      .hero h1 { font-size: 3em;}
+      .games-wrap, .about-wrap, .countdown-wrapper { min-width: 98vw; max-width: 99vw;}
+      nav button { font-size: 1em; padding: 0.6em 1em;}
+      .music-control {top: 3.5em; right: 1em;}
+    }
+  </style>
 </head>
 <body>
-    <h1>Hello, Shreeyans!</h1>
-    <p>This is a simple HTML page.</p>
+  <!-- Festive overlays (balloons, sparkles, firework, confetti, glow) -->
+  <div id="balloons"></div>
+  <div class="glow"></div>
+  <canvas id="firework-canvas" class="firework"></canvas>
+  <canvas id="confetti"></canvas>
+  <div id="sparkles"></div>
+
+  <!-- Music control -->
+  <button class="music-control" id="musicBtn" title="Play/Pause Music">▶️</button>
+
+  <!-- Nav bar -->
+  <nav>
+    <button data-page="home" class="active">Home</button>
+    <button data-page="countdown">Countdown</button>
+    <button data-page="games">Games</button>
+    <button data-page="about">About</button>
+  </nav>
+
+  <main>
+    <!-- Home Page -->
+    <section id="home" class="page active">
+      <div class="hero">
+        <h1>Happy Birthday 🎉</h1>
+        <h2>To Someone Really Special</h2>
+        <p class="message">On your special day, I just want to say you're one in a million. Thank you for being the light in so many lives — especially mine. May your day be as amazing as you are!</p>
+      </div>
+      <!-- Cake -->
+      <div class="cake-container" style="position:relative;z-index:21;">
+        <div class="cake">
+          <div class="cake-base"></div>
+          <div class="cake-top"></div>
+          <div class="candle">
+            <div class="flame"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Countdown Page -->
+    <section id="countdown" class="page">
+      <div class="countdown-wrapper">
+        <div class="countdown-title">Countdown to 31 July 🎈</div>
+        <div class="countdown" id="countdown-timer"></div>
+        <div style="margin-top:1.5em;font-size:1.1em;color:#ffe259">
+          Get ready for the next big celebration!
+        </div>
+      </div>
+    </section>
+
+    <!-- Games Page -->
+    <section id="games" class="page">
+      <div class="games-wrap">
+        <div class="countdown-title" style="margin-bottom:1em;">Birthday Games 🎮</div>
+        <div class="games-menu">
+          <button data-game="clicker" class="active">Button Clicker</button>
+          <button data-game="memory">Memory Flip</button>
+          <button data-game="type">Type Race</button>
+        </div>
+        <div class="game-area" id="game-area">
+          <!-- Games will be loaded here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- About Page -->
+    <section id="about" class="page">
+      <div class="about-wrap">
+        <div class="about-title">About This Celebration</div>
+        <div class="about-content">
+          This is the ultimate virtual birthday party page, packed with joy, color, confetti, fireworks, countdowns, music, fun games, and endless good vibes!<br><br>
+          Created with ❤️ to make your special day unforgettable.<br>
+          <b>Enjoy, play, and celebrate to the fullest!</b>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- YouTube background music (hidden) -->
+  <div style="display:none;">
+    <iframe id="ytplayer" type="text/html" width="0" height="0"
+      src="https://www.youtube.com/embed/5u4xTa3LR2U?autoplay=1&loop=1&playlist=5u4xTa3LR2U"
+      frameborder="0" allow="autoplay"></iframe>
+  </div>
+
+  <!-- Confetti.js & festive scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    // --- Navigation ---
+    const navBtns = document.querySelectorAll('nav button');
+    const pages = document.querySelectorAll('section.page');
+    navBtns.forEach(btn => {
+      btn.onclick = () => {
+        navBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        pages.forEach(p => p.classList.remove('active'));
+        document.getElementById(btn.dataset.page).classList.add('active');
+      };
+    });
+
+    // --- Countdown Timer ---
+    function updateCountdown() {
+      const target = new Date("2025-07-31T00:00:00Z");
+      const now = new Date();
+      let diff = (target - now);
+      if (diff < 0) diff = 0;
+      const d = Math.floor(diff/1000/60/60/24);
+      const h = Math.floor(diff/1000/60/60)%24;
+      const m = Math.floor(diff/1000/60)%60;
+      const s = Math.floor(diff/1000)%60;
+      document.getElementById("countdown-timer").textContent =
+        `${d}d ${h}h ${m}m ${s}s`;
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // --- Festive Effects ---
+    // Confetti
+    setInterval(() => {
+      confetti({
+        particleCount: 120,
+        spread: 120,
+        origin: { y: 0.6 }
+      });
+    }, 2000);
+    setTimeout(() => confetti({
+      particleCount: 500, spread: 200, origin: { y: 0.2 }
+    }), 1000);
+
+    // Balloons
+    const balloonColors = [
+      "#ffb347", "#fa709a", "#5eaefd", "#00e3ae", "#9be15d", "#f48fb1",
+      "#ffe259", "#fd6e6a", "#fdc094", "#a3cef1"
+    ];
+    const balloons = document.getElementById('balloons');
+    for (let i = 0; i < 12; i++) {
+      const balloon = document.createElement('div');
+      balloon.className = "balloon";
+      balloon.style.setProperty('--color', balloonColors[i % balloonColors.length]);
+      balloon.style.left = `${Math.random() * 92 + 2}%`;
+      balloon.style.animationDelay = `${Math.random() * 8}s`;
+      balloon.style.animationDuration = `${8 + Math.random() * 7}s`;
+      balloons.appendChild(balloon);
+    }
+    // Balloons CSS
+    const balloonStyles = document.createElement('style');
+    balloonStyles.textContent = `
+      .balloon {
+        position: absolute;
+        bottom: -120px;
+        width: 54px;
+        height: 75px;
+        background: radial-gradient(circle at 30% 30%, #fff9 12%, var(--color) 100%);
+        border-radius: 60% 60% 70% 70%;
+        z-index: 3;
+        opacity: 0.85;
+        box-shadow: 0 6px 26px var(--color);
+        animation: floatBalloon 10s linear infinite;
+        will-change: transform;
+      }
+      .balloon:after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: -30px;
+        width: 4px;
+        height: 30px;
+        background: #fff7;
+        border-radius: 2px;
+        transform: translateX(-50%);
+      }
+      @keyframes floatBalloon {
+        0% { transform: translateY(0) scale(1);}
+        50% { transform: translateY(-50vh) scale(1.05);}
+        100% { transform: translateY(-100vh) scale(1);}
+      }
+    `;
+    document.head.appendChild(balloonStyles);
+
+    // Sparkles
+    const sparkleContainer = document.getElementById("sparkles");
+    function addSparkle() {
+      const sparkle = document.createElement("div");
+      sparkle.className = "sparkle";
+      sparkle.style.left = (Math.random()*98+1)+"vw";
+      sparkle.style.top = (Math.random()*88+3)+"vh";
+      sparkle.style.animationDelay = (Math.random()*3)+"s";
+      sparkleContainer.appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 2600);
+    }
+    setInterval(addSparkle, 120);
+
+    // Sparkle CSS
+    const sparkleStyles = document.createElement('style');
+    sparkleStyles.textContent = `
+      .sparkle {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        pointer-events: none;
+        background: radial-gradient(circle,#fff7 0 40%,#ffd700 60%,#fff0 80%);
+        opacity: 0.85;
+        border-radius: 50%;
+        z-index: 11;
+        animation: sparkleAnim 2.4s infinite;
+      }
+      @keyframes sparkleAnim {
+        0% { transform: scale(0.1) rotate(0deg);}
+        40% { opacity: 1;}
+        60% { opacity: 1;}
+        100% { transform: scale(1.5) rotate(180deg); opacity: 0;}
+      }
+    `;
+    document.head.appendChild(sparkleStyles);
+
+    // Fireworks
+    const canvas = document.getElementById('firework-canvas');
+    const ctx = canvas.getContext('2d');
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function random(min, max) { return Math.random() * (max - min) + min; }
+    function Firework() {
+      this.x = random(0.2, 0.8) * canvas.width;
+      this.y = random(0.25, 0.5) * canvas.height;
+      this.particles = [];
+      const color = `hsl(${Math.floor(random(0,360))},99%,66%)`;
+      for(let i=0;i<80;i++) {
+        const angle = (i / 80) * 2 * Math.PI;
+        const speed = random(2,6);
+        this.particles.push({
+          x: this.x,
+          y: this.y,
+          dx: Math.cos(angle)*speed,
+          dy: Math.sin(angle)*speed,
+          color: color,
+          alpha: 1
+        });
+      }
+    }
+    let fireworks = [];
+    function spawnFirework() {
+      fireworks.push(new Firework());
+      if (fireworks.length > 10) fireworks.shift();
+    }
+    setInterval(spawnFirework, 1800);
+
+    function drawFireworks() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for (let fw of fireworks) {
+        for (let p of fw.particles) {
+          ctx.save();
+          ctx.globalAlpha = p.alpha;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 2.5, 0, 2*Math.PI);
+          ctx.fillStyle = p.color;
+          ctx.shadowColor = p.color;
+          ctx.shadowBlur = 18;
+          ctx.fill();
+          ctx.restore();
+          p.x += p.dx;
+          p.y += p.dy;
+          p.alpha -= 0.018;
+        }
+      }
+      fireworks = fireworks.map(fw => {
+        fw.particles = fw.particles.filter(p => p.alpha > 0);
+        return fw;
+      }).filter(fw => fw.particles.length > 0);
+      requestAnimationFrame(drawFireworks);
+    }
+    drawFireworks();
+
+    // --- Music Controls (YouTube background) ---
+    const ytplayer = document.getElementById("ytplayer");
+    const musicBtn = document.getElementById("musicBtn");
+    let musicPlaying = true;
+    function pauseMusic() {
+      ytplayer.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      musicBtn.textContent = "🔇";
+      musicPlaying = false;
+    }
+    function playMusic() {
+      ytplayer.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+      musicBtn.textContent = "▶️";
+      musicPlaying = true;
+    }
+    musicBtn.onclick = () => {
+      if(musicPlaying) pauseMusic();
+      else playMusic();
+    };
+    // Autoplay on load
+    setTimeout(playMusic, 2500);
+
+    // --- Games (SPA style) ---
+    const games = {
+      clicker: () => {
+        return `
+          <div style="font-size:1.3em;margin-bottom:1.1em;color:#ffe259;">How many clicks can you get in 15 seconds?</div>
+          <button id="clickBtn" style="padding:1.2em 2.5em;font-size:1.3em;background:linear-gradient(90deg,#ffe259,#fa709a);border:none;border-radius:40px;color:#fff;box-shadow:0 2px 12px #fa709a33;font-weight:700;cursor:pointer;transition:background 0.2s;">Click Me!</button>
+          <div id="clickerScore" style="font-size:2em;margin:1em 0 0 0;color:#fff;">Score: 0</div>
+          <div id="clickerTimer" style="margin-top:0.3em;color:#fa709a;font-size:1.1em;">Time left: 15s</div>
+        `;
+      },
+      memory: () => {
+        // Memory game area is set in script below
+        return `<div style="font-size:1.2em;margin-bottom:1em;color:#ffe259;">Flip pairs of cards to find all matches!</div>
+          <div style="display:flex;justify-content:center;">
+            <div id="memoryGameArea"></div>
+          </div>
+          <div id="memoryStatus" style="margin-top:1em;color:#fff;"></div>
+        `;
+      },
+      type: () => {
+        return `
+          <div style="font-size:1.2em;margin-bottom:1em;color:#ffe259;">Type the phrase as fast as you can!</div>
+          <div id="typeRacePhrase" style="font-size:1.2em;color:#fff;background:rgba(255,255,255,0.07);border-radius:20px;padding:0.6em 1em;display:inline-block;margin-bottom:1em;"></div>
+          <input id="typeRaceInput" style="padding:0.7em 1.3em;font-size:1.2em;border-radius:18px;border:1.5px solid #fa709a;outline:none;width:80%;max-width:400px;" placeholder="Start typing here..."/>
+          <div id="typeRaceStatus" style="margin-top:1em;color:#fff;"></div>
+        `;
+      }
+    };
+    const gameArea = document.getElementById("game-area");
+    const gameMenuBtns = document.querySelectorAll('.games-menu button');
+
+    function showGame(game) {
+      // load HTML
+      gameArea.innerHTML = games[game]();
+      // activate button
+      gameMenuBtns.forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`.games-menu button[data-game="${game}"]`).classList.add('active');
+      // Activate logic
+      if(game === "clicker") clickerLogic();
+      if(game === "memory") memoryLogic();
+      if(game === "type") typeRaceLogic();
+    }
+    gameMenuBtns.forEach(btn => {
+      btn.onclick = () => showGame(btn.dataset.game);
+    });
+    showGame('clicker');
+
+    // --- Clicker Game Logic ---
+    function clickerLogic() {
+      let score = 0, time = 15, started = false, timerInt;
+      const scoreDiv = document.getElementById("clickerScore");
+      const timerDiv = document.getElementById("clickerTimer");
+      const btn = document.getElementById("clickBtn");
+      btn.onclick = () => {
+        if(!started) {
+          started = true;
+          timerInt = setInterval(() => {
+            time--;
+            timerDiv.textContent = "Time left: " + time + "s";
+            if(time <= 0) {
+              clearInterval(timerInt);
+              btn.disabled = true;
+              timerDiv.textContent = "Time's up!";
+            }
+          }, 1000);
+        }
+        score++;
+        scoreDiv.textContent = "Score: " + score;
+      };
+    }
+
+    // --- Memory Game Logic ---
+    function memoryLogic() {
+      const cardSymbols = ['🍰','🎂','🎈','🎉','🎁','🍦','🎶','🎵'];
+      let cards = [...cardSymbols, ...cardSymbols];
+      cards = cards.sort(() => Math.random() - 0.5);
+      const area = document.getElementById('memoryGameArea');
+      area.style.display = 'grid';
+      area.style.gridTemplateColumns = 'repeat(4,50px)';
+      area.style.gap = '12px';
+      area.style.justifyContent = 'center';
+      area.style.alignItems = 'center';
+      area.style.margin = '0 auto';
+
+      let open = [], matched = [], moves = 0;
+      area.innerHTML = '';
+      for(let i = 0; i < cards.length; i++) {
+        const div = document.createElement('div');
+        div.className = 'memoryCard';
+        div.style.width = "50px";
+        div.style.height = "50px";
+        div.style.background = "linear-gradient(90deg,#ffe259,#fa709a)";
+        div.style.borderRadius = "10px";
+        div.style.display = "flex";
+        div.style.alignItems = "center";
+        div.style.justifyContent = "center";
+        div.style.fontSize = "2em";
+        div.style.cursor = "pointer";
+        div.style.color = "#fff";
+        div.textContent = "❓";
+        div.dataset.index = i;
+        div.onclick = () => {
+          if(open.length < 2 && !div.classList.contains('matched') && !open.includes(div)) {
+            div.textContent = cards[i];
+            open.push(div);
+            if(open.length === 2) {
+              moves++;
+              if(cards[open[0].dataset.index] === cards[open[1].dataset.index]) {
+                open[0].classList.add('matched');
+                open[1].classList.add('matched');
+                matched.push(cards[open[0].dataset.index]);
+                open = [];
+                if(matched.length === cardSymbols.length) {
+                  document.getElementById("memoryStatus").textContent = `You won in ${moves} moves! 🎉`;
+                }
+              } else {
+                setTimeout(() => {
+                  open[0].textContent = open[1].textContent = "❓";
+                  open = [];
+                }, 800);
+              }
+            }
+          }
+        }
+        area.appendChild(div);
+      }
+      document.getElementById("memoryStatus").textContent = "";
+    }
+
+    // --- Type Race Game Logic ---
+    function typeRaceLogic() {
+      const phrases = [
+        "Happy Birthday! Wishing you endless joy.",
+        "Let the party begin! Celebrate to the fullest.",
+        "May your year be filled with happiness and laughter.",
+        "The world is better with you in it.",
+        "You are one in a million. Enjoy your day!",
+        "Sending you smiles for every moment of your special day."
+      ];
+      const phrase = phrases[Math.floor(Math.random()*phrases.length)];
+      document.getElementById("typeRacePhrase").textContent = phrase;
+      const input = document.getElementById("typeRaceInput");
+      const status = document.getElementById("typeRaceStatus");
+      let start, ended = false;
+      input.value = "";
+      input.onfocus = () => { if(!start) start = Date.now(); };
+      input.oninput = () => {
+        if(!start) start = Date.now();
+        if(input.value === phrase && !ended) {
+          const t = (Date.now() - start)/1000;
+          status.textContent = `Great! Time: ${t.toFixed(2)}s 🎉`;
+          ended = true;
+        }
+      };
+      status.textContent = "";
+    }
+  </script>
 </body>
 </html>
